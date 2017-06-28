@@ -1,0 +1,10 @@
+---
+  install_packages:
+    - wget
+    - unzip
+    - tar
+    - python
+    - python3
+    - git
+    - python-requests
+    - pywinrm

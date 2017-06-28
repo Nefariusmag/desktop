@@ -1,0 +1,7 @@
+---
+- host: localhost
+  user: "{{ user }}"
+  become: yes
+  become_method: sudo
+  roles:
+    - { role: workspace }

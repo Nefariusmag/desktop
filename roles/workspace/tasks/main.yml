@@ -1,0 +1,42 @@
+---
+# pip install pywinrm
+
+  - block: # CENTOS
+
+    - name: stop selinux
+      lineinfile:
+        dest: /etc/selinux/config
+        regexp: ^SELINUX=enforcing
+        line: SELINUX=disabled
+        backrefs: yes
+        state: present
+
+    - name: stop iptable
+      service:
+        name: iptables
+        state: stopped
+        enabled: no
+
+    when: (ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux")
+
+  - name: nstall packets
+    apt:
+      name: "{{item}}"
+      state: present
+      update_cache: yes
+    with_items: "{{ install_packages }}"
+    when: ansible_distribution == '"astra linux se"'
+
+  - name:
+    shell: |
+      wget http://distr-repo-i.gistek.lanit.ru/repo/3rd-party/oracle/jdk/1.8/install_java8_bin.sh -O /opt/install_java8_bin.sh
+      chmod +x /opt/install_java8_bin.sh
+      /opt/install_java8_bin.sh
+
+  - name:
+    shell: |
+      wget http://distr-repo-i.gistek.lanit.ru/repo/3rd-party/apache/maven/3.5.0/apache-maven-3.5.0-bin.tar.gz
+      tar -xzvf apache-maven-3.5.0-bin.tar.gz
+      echo "PATH=$PATH:/opt/apache-maven-3.5.0/bin" >> /etc/profile.d/01_jdk8.sh
+    chdir:
+      /opt

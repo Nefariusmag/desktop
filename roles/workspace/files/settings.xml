@@ -1,0 +1,43 @@
+<settings>
+  <profiles>
+    <profile>
+      <id>lanit</id>
+      <repositories>
+        <repository>
+          <id>lanit-nexus-repo</id>
+          <name>Lanit Nexus repo</name>
+          <url>http://nexus.gistek.lanit.ru/nexus/content/groups/public</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>lanit-nexus-repo</id>
+          <name>Lanit Nexus repo </name>
+          <url>http://nexus.gistek.lanit.ru/nexus/content/groups/public</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+    <profile>
+      <id>home</id>
+      <repositories>
+        <repository>
+          <id>local-repo</id>
+          <name>local repo</name>
+          <url>file:${user.home}/.m2/repository</url>
+      </repository>
+      </repositories>
+    </profile>    
+  </profiles>
+</settings>
