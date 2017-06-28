@@ -6,5 +6,7 @@
     - python
     - python3
     - git
+    - gitkraken
+    - google-chrome
     - python-requests
     - pywinrm
