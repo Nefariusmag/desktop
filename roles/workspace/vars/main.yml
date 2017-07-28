@@ -6,7 +6,15 @@
     - python
     - python3
     - git
-    - gitkraken
+    # - gitkraken
     - google-chrome
     - python-requests
+    - python-setuptools
+    - docker
+
+  pip_packeges:
     - pywinrm
+    - psycopg2
+    # - logging
+    - pyTelegramBotAPI
+    - jenkinsapi

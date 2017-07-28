@@ -1,23 +1,33 @@
 ---
-# pip install pywinrm
-
   - block: # CENTOS
 
-    - name: stop selinux
-      lineinfile:
-        dest: /etc/selinux/config
-        regexp: ^SELINUX=enforcing
-        line: SELINUX=disabled
-        backrefs: yes
+    # - name: stop selinux
+    #   lineinfile:
+    #     dest: /etc/selinux/config
+    #     regexp: ^SELINUX=enforcing
+    #     line: SELINUX=disabled
+    #     backrefs: yes
+    #     state: present
+    #
+    # - name: stop iptable
+    #   service:
+    #     name: iptables
+    #     state: stopped
+    #     enabled: no
+
+    - name: установка пакетов yum из списка
+      yum:
+        name: "{{item}}"
         state: present
+      with_items: "{{ install_packages }}"
 
-    - name: stop iptable
-      service:
-        name: iptables
-        state: stopped
-        enabled: no
+    when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
 
-    when: (ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux")
+  - name: name
+    register: output
+    shell: echo "{{ansible_distribution}}"
+
+  - debug: var=output.stdout_lines
 
   - name: install packets
     apt:
@@ -26,6 +36,10 @@
       update_cache: yes
     with_items: "{{ install_packages }}"
     when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "astra linux se"
+
+  - name: install pip packets
+    shell: pip3 install {{item}}
+    with_items: "{{ pip_packeges }}"
 
   # - name:
   #   shell: |
@@ -40,3 +54,9 @@
   #     echo "PATH=$PATH:/opt/apache-maven-3.5.0/bin" >> /etc/profile.d/01_jdk8.sh
   #   chdir:
   #     /opt
+
+  # - name: install zsh
+  #   shell: curl https://raw.githubusercontent.com/viasite-ansible/ansible-role-zsh/master/install.sh | bash
+  #
+  # - name: edit bash on zsh
+  #   shell: chsh -s /bin/zsh
