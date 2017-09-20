@@ -3,14 +3,19 @@
     - wget
     - unzip
     - tar
-    - python
+    - java
+    - python2
     - python3
     - git
     # - gitkraken
-    - google-chrome
+    # - google-chrome
     - python-requests
     - python-setuptools
     - docker
+    - remmina
+    - mc
+    - libselinux-python
+    - pgadmin3
 
   pip_packeges:
     - pywinrm
