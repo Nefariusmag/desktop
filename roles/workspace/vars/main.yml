@@ -16,10 +16,14 @@
     - mc
     - libselinux-python
     - pgadmin3
+    - lockfile
+    - fping
+    - sshfs
 
   pip_packeges:
     - pywinrm
     - psycopg2
-    # - logging
     - pyTelegramBotAPI
     - jenkinsapi
+    - pysphere
+    - ansible
