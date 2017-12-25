@@ -12,11 +12,12 @@
     - python-requests
     - python-setuptools
     - docker
+    - docker-compose
     - remmina
     - mc
     - libselinux-python
     - pgadmin3
-    - lockfile
+    # - lockfile
     - fping
     - sshfs
 
