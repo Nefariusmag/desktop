@@ -1,0 +1,49 @@
+- name: install apt from list
+  apt:
+    name: "{{item}}"
+    state: present
+    # update_cache: yes
+  with_items: "{{ install_packages_debian }}"
+
+- name: install docker 0
+  shell: apt-get update
+
+- name: install docker 1
+  shell: curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add -
+
+- name: install docker 2
+  shell: apt-key fingerprint 0EBFCD88
+
+- name: install docker 3
+  shell: add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+   $(lsb_release -cs) \
+   stable"
+
+- name: install docker 4
+  shell: apt-get update
+  ignore_errors: True
+
+- name: install docker 5
+  apt:
+    name: docker-ce
+    state: present
+  ignore_errors: True
+
+- block: # download chrome
+
+  - get_url:
+      url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      dest: /opt
+
+  - apt:
+      name: /opt/google-chrome-stable_current_amd64.deb
+
+- block: # download atom
+
+  - get_url:
+      url: https://atom.io/download/deb
+      dest: /opt/atom.deb
+
+  - apt:
+      name: /opt/atom.deb

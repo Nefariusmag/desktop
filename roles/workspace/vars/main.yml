@@ -19,7 +19,7 @@ install_packages_centos:
   # - fping
   # - sshfs
 
-install_packages:
+install_packages_fedora:
   - wget
   - unzip
   - tar
@@ -38,6 +38,32 @@ install_packages:
   # - lockfile
   # - fping
   # - sshfs
+  - dnf-plugins-core
+
+install_packages_debian:
+  - wget
+  - unzip
+  - tar
+  # - java
+  # - python2
+  # - python3
+  - git
+  # - gitkraken
+  # - google-chrome
+  - python-requests
+  # - python-setuptools
+  # - remmina
+  - mc
+  # - libselinux-python
+  # - pgadmin3
+  # - lockfile
+  # - fping
+  # - sshfs
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg2
+  - software-properties-common
 
 pip_packeges:
   - pywinrm

@@ -15,11 +15,6 @@
 
 - name: Add yum repository
   shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  # yum_repository:
-  #   name: docker
-  #   description: "For docker"
-  #   baseurl: https://download.docker.com/linux/centos/docker-ce.repo
-  #   state: present
 
 - name: install docker
   yum:
@@ -55,5 +50,5 @@
 
   - name: delete atom
     file:
-      path: /opt/atom.rpm  
+      path: /opt/atom.rpm
       state: absent

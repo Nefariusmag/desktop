@@ -1,21 +1,17 @@
+- name: install python2-dnf
+  shell: dnf install python2-dnf -y
+
 - name: install dnf from list
   dnf:
     name: "{{item}}"
     state: present
-  with_items: "{{ install_packages }}"
-
-- name: install yum for Fedora
-  dnf:
-    name: "{{item}}"
-    state: present
-  with_items:
-    - dnf-plugins-core
+  with_items: "{{ install_packages_fedora }}"
 
 - name: add repo
   shell: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
 - name: install docker
-  yum:
+  dnf:
     name: docker-ce
     state: present
 
@@ -35,4 +31,4 @@
       dest: /opt/atom.rpm
 
   - yum:
-      name: /opt/atom.rpm      
+      name: /opt/atom.rpm

@@ -19,18 +19,21 @@
 
 - block:
 
-  - name: install apt from list
-    apt:
-      name: "{{item}}"
-      state: present
-      update_cache: yes
-    with_items: "{{ install_packages }}"
+  # - name: for Debian
+  #   include: debian.yml
 
-  - name: install pip packets
-    shell: pip3 install {{item}}
-    with_items: "{{ pip_packeges }}"
+  # - name: install apt from list
+  #   apt:
+  #     name: "{{item}}"
+  #     state: present
+  #     update_cache: yes
+  #   with_items: "{{ install_packages }}"
 
   when: ansible_os_family == "Debian"
+
+- name: install pip packets
+  shell: pip3 install {{item}}
+  with_items: "{{ pip_packeges }}"
 
 - name: download docker-compose
   shell: curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
