@@ -1,5 +1,4 @@
-yum -y install python2 python2-dnf
-pip3 install ansible
+yum -y install ansible
 ansible-playbook workspace.yml
 # ansible-galaxy install viasite-ansible.zsh --force
 # curl https://raw.githubusercontent.com/viasite-ansible/ansible-role-zsh/master/playbook.yml > /tmp/zsh.yml

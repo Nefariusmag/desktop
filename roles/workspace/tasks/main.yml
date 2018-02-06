@@ -1,27 +1,23 @@
 ---
 
-  - name: stop selinux
-    lineinfile:
-      dest: /etc/selinux/config
-      regexp: ^SELINUX=enforcing
-      line: SELINUX=disabled
-      backrefs: yes
-      state: present
-    when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "Fedora"
+- block:
 
-  - name: install yum from list
-    yum:
-      name: "{{item}}"
-      state: present
-    with_items: "{{ install_packages }}"
-    when: ansible_distribution == "CentOS" or ansible_distribution == "Red Hat Enterprise Linux"
+  - name: for CentOS
+    include: centos.yml
+    when: ansible_distribution == "CentOS"
 
-  - name: install dnf from list
-    dnf:
-      name: "{{item}}"
-      state: present
-    with_items: "{{ install_packages }}"
+  - name: for Fedora
+    include: fedora.yml
     when: ansible_distribution == "Fedora"
+
+  # - name: start docker
+  #   service:
+  #     name: docker
+  #     state: started
+
+  when: ansible_os_family == "RedHat"
+
+- block:
 
   - name: install apt from list
     apt:
@@ -29,57 +25,171 @@
       state: present
       update_cache: yes
     with_items: "{{ install_packages }}"
-    when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "astra linux se"
 
   - name: install pip packets
     shell: pip3 install {{item}}
     with_items: "{{ pip_packeges }}"
 
-  - name: install maven
-    shell: |
-      cd /opt
-      wget http://mirror.linux-ia64.org/apache/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
-      tar -xzvf apache-maven-3.5.0-bin.tar.gz
-      echo "PATH=$PATH:/opt/apache-maven-3.5.0/bin" >> /etc/profile.d/01_jdk8.sh
-      rm apache-maven-3.5.0-bin.tar.gz
+  when: ansible_os_family == "Debian"
 
-  - name: download chrome
-    shell: |
-      wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-      dnf install google-chrome-stable_current_x86_64.rpm
+- name: download docker-compose
+  shell: curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 
-  - name: download atom
-    shell: |
-      wget https://atom.io/download/rpm
-      dnf install rpm
+- name: chmod for docker-compose
+  file:
+    path: /usr/local/bin/docker-compose
+    state: file
+    mode: 0755
+
+
+- block: # install maven
+
+  - name: download maven
+    get_url:
+      url: http://apache-mirror.rbc.ru/pub/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+      dest: /opt/apache-maven.tar.gz
+
+  - name: unarchive maven
+    unarchive:
+      src: /opt/apache-maven.tar.gz
+      dest: /opt
+
+  - name: create link maven
+    file:
+      path: /opt/maven
+      src: /opt/apache-maven-3.5.2
+      state: link
+
+  - name: create /etc/profile.d/maven.sh
+    file:
+      path: /etc/profile.d/maven.sh
+      state: touch
+      mode: 0755
+
+  - name: add PATH for maven
+    lineinfile:
+      path: /etc/profile.d/maven.sh
+      line: PATH=$PATH:/opt/maven/bin
+
+  - name: delete maven
+    file:
+      path: /opt/apache-maven.tar.gz
+      state: absent
+  #
+#  # shell: |
+  #   cd /opt
+  #   wget http://apache-mirror.rbc.ru/pub/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+  #   tar -xzvf apache-maven-3.5.2-bin.tar.gz
+  #   ln -s /opt/apache-maven-3.5.2 /opt/maven
+  #   echo "PATH=$PATH:/opt/maven/bin" >> /etc/profile.d/01_jdk8.sh
+  #   rm apache-maven-3.5.2-bin.tar.gz
+
+# - block: # download chrome
+#
+#   - get_url:
+#       url: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+#       dest: /opt
+#
+#   - yum:
+#       name: /opt/google-chrome-stable_current_x86_64.rpm
+
+#  # shell: |
+  #   wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+  #   dnf install google-chrome-stable_current_x86_64.rpm
+
+# - block: # download atom
+#
+#   - get_url:
+#       url: https://atom.io/download/rpm
+#       dest: /opt/atom.rpm
+#
+#   - yum:
+#       name: /opt//opt/atom.rpm
+
+# - name: download atom
+#   shell: |
+#     wget -q https://atom.io/download/rpm
+#     dnf install rpm
+
+- block:
 
   - name: download Postman
-    shell: |
-      cd /opt
-      wget https://dl.pstmn.io/download/latest/linux64
-      tar xzvf Postman-linux-x64-5.5.0.tar.gz
-      mv Postman-linux-x64-5.5.0/Postman Postman
+    get_url:
+      url: https://dl.pstmn.io/download/latest/linux64
+      dest: /opt/Postman-linux-x64-5.5.0.tar.gz
+      timeout: 100
 
-  - name: download gitkraken
-    shell: |
-      cd /opt
-      wget https://release.gitkraken.com/linux/gitkraken-amd64.tar.gz
-      tar xzvf gitkraken-amd64.tar.gz
-      cd gitkraken
-      sudo ln -s /usr/lib64/libcurl.so.4 libcurl-gnutls.so.4
+  - name: unarchive Postman
+    unarchive:
+      src: /opt/Postman-linux-x64-5.5.0.tar.gz
+      dest: /opt
+
+  - name: create link for Postman
+    file:
+      path: /opt/Postman-linux-x64
+      src: /opt/Postman
+      state: link
+
+  - name: delete Postman
+    file:
+      path: /opt/Postman-linux-x64-5.5.0.tar.gz
+      state: absent
+
+- block:
 
   - name: download packer
-    shell: |
-      cd /opt
-      wget https://releases.hashicorp.com/packer/1.1.3/packer_1.1.3_linux_amd64.zip?_ga=2.125730440.305266263.1514202778-1122507811.1514202778
-      unzip packer_1.1.3_linux_amd64.zip
-      mv packer_1.1.3_linux_amd64/packer /bin/packer
-      rm -rf packer*
+    get_url:
+      url: https://releases.hashicorp.com/packer/1.1.3/packer_1.1.3_linux_amd64.zip?_ga=2.125730440.305266263.1514202778-1122507811.1514202778
+      dest: /opt/
+
+  - name: unarchive packer
+    unarchive:
+      src: /opt/packer_1.1.3_linux_amd64.zip
+      dest: /bin
+
+  - name: delete packer
+    file:
+      path: /opt/packer_1.1.3_linux_amd64.zip
+      state: absent
+
+- block:
 
   - name: download terraform
-    shell: |
-      cd /opt
-      wget https://releases.hashicorp.com/terraform/0.11.1/terraform_0.11.1_linux_amd64.zip?_ga=2.119035913.1857397525.1514202783-2102502424.1514202783
-      unzip packer_1.1.3_linux_amd64.zip
-      mv terraform_0.11.1_linux_amd64/terraform /bin/terraform
-      rm -rf terraform*
+    get_url:
+      url: https://releases.hashicorp.com/terraform/0.11.1/terraform_0.11.1_linux_amd64.zip?_ga=2.119035913.1857397525.1514202783-2102502424.1514202783
+      dest: /opt/
+
+  - name: unarchive terraform
+    unarchive:
+      src: /opt/terraform_0.11.1_linux_amd64.zip
+      dest: /bin
+
+  - name: delete terraform
+    file:
+      path: /opt/terraform_0.11.1_linux_amd64.zip
+      state: absent
+
+- block:
+
+  - name: download gitkraken
+    get_url:
+      url: https://release.gitkraken.com/linux/gitkraken-amd64.tar.gz
+      dest: /opt/gitkraken-amd64.tar.gz
+      timeout: 900
+
+  - name: unarchive gitkraken
+    unarchive:
+      src: /opt/gitkraken-amd64.tar.gz
+      dest: /opt
+      copy: no
+
+  - name: create link for gitkraken
+    file:
+      path: /opt/gitkraken/libcurl-gnutls.so.4
+      src: /usr/lib64/libcurl.so.4
+      state: link
+
+  - name: delete gitkraken
+    file:
+      path: /opt/Postman-linux-x64-5.5.0.tar.gz
+      state: absent

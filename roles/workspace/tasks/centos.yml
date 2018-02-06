@@ -1,0 +1,59 @@
+- name: install yum from list
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items: "{{ install_packages_centos }}"
+
+- name: install yum for CentOS
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: Add yum repository
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  # yum_repository:
+  #   name: docker
+  #   description: "For docker"
+  #   baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+  #   state: present
+
+- name: install docker
+  yum:
+    name: docker-ce
+    state: present
+
+- block: # download chrome
+
+  - name: download chrome
+    get_url:
+      url: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+      dest: /opt
+
+  - name: install chrome
+    yum:
+      name: /opt/google-chrome-stable_current_x86_64.rpm
+
+  - name: delete chrome
+    file:
+      path: /opt/google-chrome-stable_current_x86_64.rpm
+      state: absent
+
+- block: # download atom
+
+  - name: download atom
+    get_url:
+      url: https://atom.io/download/rpm
+      dest: /opt/atom.rpm
+
+  - name: install atom
+    yum:
+      name: /opt/atom.rpm
+
+  - name: delete atom
+    file:
+      path: /opt/atom.rpm  
+      state: absent
