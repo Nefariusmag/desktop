@@ -1,12 +1,13 @@
 if [ -n "$(cat /etc/issue | grep Debian)" ]; then
-  echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" >> /etc/apt/sources.list
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
-  apt-get update
-  apt-get install ansible -y --allow-unauthenticated
+  apt-get -y install curl
 fi
 if [ -n "$(cat /etc/issue | grep RedHat)" ]; then
-  yum -y install ansible
+  yum -y install curl
 fi
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+
+pip install ansible
 
 ansible-playbook workspace.yml
 # ansible-galaxy install viasite-ansible.zsh --force

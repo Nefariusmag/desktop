@@ -3,71 +3,45 @@ install_packages_centos:
   - wget
   - unzip
   - tar
-  # - java
-  - python2
-  # - python3
   - git
-  # - gitkraken
-  # - google-chrome
-  - python-requests
-  # - python-setuptools
-  # - remmina
   - mc
+  - python-requests
   - libselinux-python
-  # - pgadmin3
-  # - lockfile
-  # - fping
-  # - sshfs
+  - cifs-utils
+  - gcc
+  # - nfs-common
 
 install_packages_fedora:
   - wget
   - unzip
   - tar
-  # - java
   - python2
-  # - python3
   - git
-  # - gitkraken
-  # - google-chrome
   - python-requests
-  # - python-setuptools
-  # - remmina
   - mc
   - libselinux-python
-  # - pgadmin3
-  # - lockfile
-  # - fping
-  # - sshfs
   - dnf-plugins-core
 
 install_packages_debian:
   - wget
   - unzip
   - tar
-  # - java
-  # - python2
-  # - python3
   - git
-  # - gitkraken
-  # - google-chrome
   - python-requests
-  # - python-setuptools
-  # - remmina
   - mc
-  # - libselinux-python
-  # - pgadmin3
-  # - lockfile
-  # - fping
-  # - sshfs
   - apt-transport-https
   - ca-certificates
-  - curl
   - gnupg2
   - software-properties-common
 
 pip_packeges:
   - pywinrm
-  - psycopg2
+  - psycopg2-binary
   - pyTelegramBotAPI
   - jenkinsapi
   - pysphere
+  - xlrd
+  - python-dateutil
+  - gspread
+  - oauth2client
+  - pysocks

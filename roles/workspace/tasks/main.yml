@@ -2,25 +2,14 @@
 
 - block:
 
-  - name: for CentOS
-    include: centos.yml
-    when: ansible_distribution == "CentOS"
-
-  - name: for Fedora
-    include: fedora.yml
-    when: ansible_distribution == "Fedora"
-
-  # - name: start docker
-  #   service:
-  #     name: docker
-  #     state: started
+  - include: centos.yml
 
   when: ansible_os_family == "RedHat"
 
 - block:
 
-  # - name: for Debian
-  #   include: debian.yml
+  - name: for Debian
+    include: debian.yml
 
   # - name: install apt from list
   #   apt:
@@ -30,6 +19,23 @@
   #   with_items: "{{ install_packages }}"
 
   when: ansible_os_family == "Debian"
+
+- name: download python 3
+  get_url:
+    url: https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tar.xz
+    dest: /tmp
+
+- name: unarchive Python 3
+  unarchive:
+    src: /tmp/Python-3.7.0.tar.xz
+    dest: /tmp
+
+- name: install python 3
+  shell: |
+    cd /tmp/Python-3.7.0
+    ./configure
+    make
+    make install
 
 - name: install pip packets
   shell: pip3 install {{item}}
@@ -43,7 +49,6 @@
     path: /usr/local/bin/docker-compose
     state: file
     mode: 0755
-
 
 - block: # install maven
 
