@@ -48,3 +48,16 @@
   - name: install atom
     yum:
       name: /tmp/atom.rpm
+
+# - block: # install gitkraken
+#
+#     - name: install snap
+#       dnf:
+#         name: snapd
+#         state: present
+#
+#     - name: create link
+#       shell: ln -s /var/lib/snapd/snap /snap
+#
+#     - name: install gitkraken
+#       shell: snap -y install gitkraken

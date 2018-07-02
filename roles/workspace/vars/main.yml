@@ -9,18 +9,14 @@ install_packages_centos:
   - libselinux-python
   - cifs-utils
   - gcc
+  - gcc-c++
+  - yum-utils 
+  - openssl-devel
+  - sqlite-devel
+  - zlib
+  - zlib-devel
+  - libffi-devel
   # - nfs-common
-
-install_packages_fedora:
-  - wget
-  - unzip
-  - tar
-  - python2
-  - git
-  - python-requests
-  - mc
-  - libselinux-python
-  - dnf-plugins-core
 
 install_packages_debian:
   - wget
