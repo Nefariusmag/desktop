@@ -10,12 +10,14 @@ install_packages_centos:
   - cifs-utils
   - gcc
   - gcc-c++
-  - yum-utils 
+  - yum-utils
   - openssl-devel
   - sqlite-devel
   - zlib
   - zlib-devel
   - libffi-devel
+  - python3-devel
+  - python2-devel
   # - nfs-common
 
 install_packages_debian:
@@ -41,3 +43,4 @@ pip_packeges:
   - gspread
   - oauth2client
   - pysocks
+  - python-gitlab

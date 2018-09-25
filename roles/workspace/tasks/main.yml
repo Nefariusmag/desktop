@@ -15,15 +15,9 @@
 
 - block: # Python 3
 
-  # - name: download python 3
-  #   get_url:
-  #     url: https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tar.xz
-  #     dest: /tmp
-
   - name: unarchive Python 3
     unarchive:
-      # src: /tmp/Python-3.7.0.tar.xz
-      src: https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tar.xz
+      src: https://www.python.org/ftp/python/3.6.6/Python-3.6.6.tgz
       dest: /tmp
       remote_src: yes
 
@@ -37,6 +31,11 @@
 - name: install pip packets
   shell: pip3 install {{item}}
   with_items: "{{ pip_packeges }}"
+
+- block: # Atom plugin
+
+  - name: installation atom plugins
+    shell: apm install language-jenkinsfile
 
 - block: # Docker
 
@@ -111,3 +110,16 @@
       src: https://download.jetbrains.com/idea/ideaIC-2018.1.5.tar.gz
       dest: /opt
       remote_src: yes
+
+- block: # pycharm
+
+  - name: download pycharm
+    unarchive:
+      src: https://download.jetbrains.com/python/pycharm-community-2018.2.4.tar.gz
+      dest: /opt
+      remote_src: yes
+
+- block:
+
+  - name: install zsh
+    shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
