@@ -1,28 +1,26 @@
 - name: install yum from list
-  yum:
+  dnf:
     name: "{{item}}"
     state: present
   with_items: "{{ install_packages_centos }}"
 
-- shell: yum -y update
-- shell: yum -y groupinstall development
+- shell: dnf -y update
+#- shell: dnf -y groupinstall development
 
 - block: # download docker
 
   - name: install yum for CentOS
-    yum:
+    dnf:
       name: "{{item}}"
       state: present
     with_items:
-      - yum-utils
-      - device-mapper-persistent-data
-      - lvm2
+      - dnf-plugins-core
 
   - name: Add yum repository
-    shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    shell: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 
   - name: install docker
-    yum:
+    dnf:
       name: docker-ce
       state: present
 
@@ -34,7 +32,7 @@
       dest: /tmp
 
   - name: install chrome
-    yum:
+    dnf:
       name: /tmp/google-chrome-stable_current_x86_64.rpm
 
 
@@ -46,18 +44,20 @@
       dest: /tmp/atom.rpm
 
   - name: install atom
-    yum:
+    dnf:
       name: /tmp/atom.rpm
 
 # - block: # install gitkraken
-#
-#     - name: install snap
-#       dnf:
-#         name: snapd
-#         state: present
-#
-#     - name: create link
-#       shell: ln -s /var/lib/snapd/snap /snap
-#
-#     - name: install gitkraken
-#       shell: snap -y install gitkraken
+        
+
+- name: install snap
+  dnf:
+   name: snapd
+   state: present
+
+- name: create link
+  ignore_errors: yes
+  shell: ln -s /var/lib/snapd/snap /snap
+
+- name: install gitkraken
+  shell: snap install gitkraken

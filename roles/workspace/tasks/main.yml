@@ -2,7 +2,7 @@
 
 - block:
 
-  - include: centos.yml
+  - include: fedora.yml
 
   when: ansible_os_family == "RedHat"
 
@@ -23,7 +23,7 @@
 
   - name: install python 3
     shell: |
-      cd /tmp/Python-3.7.0
+      cd /tmp/Python-3.6.6
       ./configure
       make
       make install
