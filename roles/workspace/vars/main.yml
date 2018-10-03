@@ -1,5 +1,5 @@
 ---
-install_packages_centos:
+install_packages_fedora:
   - wget
   - unzip
   - tar
@@ -18,6 +18,8 @@ install_packages_centos:
   - libffi-devel
   - python3-devel
   - python2-devel
+  - postgresql
+  - postgresql-libs
   # - nfs-common
 
 install_packages_debian:

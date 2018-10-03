@@ -2,7 +2,7 @@
   dnf:
     name: "{{item}}"
     state: present
-  with_items: "{{ install_packages_centos }}"
+  with_items: "{{ install_packages_fedora }}"
 
 - shell: dnf -y update
 #- shell: dnf -y groupinstall development
@@ -48,7 +48,7 @@
       name: /tmp/atom.rpm
 
 # - block: # install gitkraken
-        
+
 
 - name: install snap
   dnf:
