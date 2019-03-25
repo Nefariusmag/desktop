@@ -15,10 +15,7 @@
   shell: apt-key fingerprint 0EBFCD88
 
 - name: install docker 3
-  shell: add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-   $(lsb_release -cs) \
-   stable"
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable"
 
 - name: install docker 4
   shell: apt-get update
@@ -32,12 +29,13 @@
 
 - block: # download chrome
 
-  - get_url:
+  - name: download chrome
+    get_url:
       url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      dest: /opt
+      dest: /opt/google-chrome-stable_current_amd64.deb
 
-  - apt:
-      name: /opt/google-chrome-stable_current_amd64.deb
+#  - name: install chrome
+#    shell: apt-get install -y /opt/google-chrome-stable_current_amd64.deb
 
 - block: # download atom
 
@@ -45,5 +43,5 @@
       url: https://atom.io/download/deb
       dest: /opt/atom.deb
 
-  - apt:
-      name: /opt/atom.deb
+#  - apt:
+#      name: /opt/atom.deb

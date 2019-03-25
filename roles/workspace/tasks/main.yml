@@ -8,8 +8,8 @@
 
 - block:
 
-  - name: for Debian
-    include: debian.yml
+  - name: for Ubuntu
+    include: ubuntu.yml
 
   when: ansible_os_family == "Debian"
 
@@ -123,3 +123,8 @@
 
   - name: install zsh
     shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+- name: add ctop
+  lineinfile:
+    line: "alias ctop='docker run --rm -ti -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop:latest'"
+    path: ~/.bash_profile

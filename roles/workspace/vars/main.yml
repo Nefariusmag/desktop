@@ -33,6 +33,8 @@ install_packages_debian:
   - ca-certificates
   - gnupg2
   - software-properties-common
+  - make
+  - gcc
 
 pip_packeges:
   - pywinrm
@@ -46,3 +48,4 @@ pip_packeges:
   - oauth2client
   - pysocks
   - python-gitlab
+  - docker-pretty-ps

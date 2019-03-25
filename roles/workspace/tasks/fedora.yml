@@ -49,15 +49,5 @@
 
 # - block: # install gitkraken
 
-
-- name: install snap
-  dnf:
-   name: snapd
-   state: present
-
-- name: create link
-  ignore_errors: yes
-  shell: ln -s /var/lib/snapd/snap /snap
-
 - name: install gitkraken
-  shell: snap install gitkraken
+  shell: dnf -y install https://release.gitkraken.com/linux/gitkraken-amd64.rpm
