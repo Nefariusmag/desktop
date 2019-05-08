@@ -35,6 +35,7 @@ install_packages_debian:
   - software-properties-common
   - make
   - gcc
+  - zlib1g-dev
 
 pip_packeges:
   - pywinrm
