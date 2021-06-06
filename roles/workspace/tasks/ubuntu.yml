@@ -34,8 +34,8 @@
       url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
       dest: /opt/google-chrome-stable_current_amd64.deb
 
-#  - name: install chrome
-#    shell: apt-get install -y /opt/google-chrome-stable_current_amd64.deb
+ - name: install chrome
+   shell: apt-get install -y /opt/google-chrome-stable_current_amd64.deb
 
 - block: # download atom
 
@@ -43,5 +43,5 @@
       url: https://atom.io/download/deb
       dest: /opt/atom.deb
 
-#  - apt:
-#      name: /opt/atom.deb
+ - name: install chrome
+   shell: apt-get install -y /opt/atom.deb
